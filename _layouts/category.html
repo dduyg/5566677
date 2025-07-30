@@ -4,14 +4,14 @@ layout: default
 
 <h1>📂 Notes in category: "{{ page.category }}"</h1>
 
-{% assign categorized_notes = site.notes | where_exp: "note", "note.published != false and note.categories contains page.category" %}
-<p>{{ categorized_notes | size }} item{% if categorized_notes | size != 1 %}s{% endif %} under this category.</p>
+{% assign filtered_notes = site.notes | where_exp: "note", "note.published != false and note.categories contains page.category" %}
+
+<p>{{ filtered_notes | size }} item{% if filtered_notes.size != 1 %}s{% endif %} under this category.</p>
 
 <ul>
-  {% for note in categorized_notes %}
+  {% for note in filtered_notes %}
     <li>
       <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
-      <small>— Last modified: {{ note.last_modified_at }}</small>
     </li>
   {% endfor %}
 </ul>
