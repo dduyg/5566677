@@ -1,9 +1,9 @@
 ---
 layout: note
-title: Secret
+title: "Example Hidden Note"
 published: false
 tags: [python, glitch]
-categories: [programming]
+categories: [productivity]
 last_modified_at: 2025-06-22
 ---
 
