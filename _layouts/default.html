@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h2>
+      <ul>
+        <li><a href="{{ '/tags/' | relative_url }}">🏷 Tags</a></li>
+        <li><a href="{{ '/categories/' | relative_url }}">📂 Categories</a></li>
+        <li><a href="{{ '/graph/' | relative_url }}">🕸 Graph</a></li>
+      </ul>
+      <hr>
+      <nav>
+        <ul>
+          {% for note in site.notes %}
+            {% if note.published != false %}
+              <li><a href="{{ note.url | relative_url }}">{{ note.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+    </aside>
+    <main class="content">
+      {{ content }}
+    </main>
+  </div>
+</body>
+</html>
