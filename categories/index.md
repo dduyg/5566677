@@ -4,7 +4,7 @@ title: All Categories
 permalink: /categories/
 ---
 
-<h1>📂 All Categories</h1>
+# 📂 All Categories
 
 <ul>
   {% assign all_categories = "" | split: "" %}
