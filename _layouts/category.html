@@ -1,30 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>{{ page.title }} | {{ site.title }}</title>
-  <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
-</head>
-<body>
-  <div class="container">
-    <aside class="sidebar">
-      <!-- Your nav/sidebar here -->
-    </aside>
+---
+layout: default
+---
 
-    <main class="content">
-      <h1>{{ page.title }}</h1>
-      <ul>
-        {% for note in site.notes %}
-          {% if note.published != false and note.categories contains page.category %}
-            <li><a href="{{ note.url | relative_url }}">{{ note.title }}</a></li>
-          {% endif %}
-        {% endfor %}
-      </ul>
-    </main>
-  </div>
+<h1>📂 Notes in category "{{ page.category }}"</h1>
 
-  <footer>
-    <!-- Your footer here -->
-  </footer>
-</body>
-</html>
+<ul>
+  {% assign published_notes = site.notes | where_exp: "note", "note.published != false" %}
+  {% assign categorized_notes = published_notes | where_exp: "note", "note.categories contains page.category" %}
+  {% assign sorted_notes = categorized_notes | sort: "last_modified_at" | reverse %}
+
+  {% for note in sorted_notes %}
+    <li>
+      <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
+      <small>— Last modified: {{ note.last_modified_at }}</small>
+    </li>
+  {% endfor %}
+</ul>
