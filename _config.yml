@@ -17,8 +17,3 @@ defaults:
       published: true
 
 permalink: pretty
-
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
