@@ -1,6 +1,6 @@
-title: My Digital Garden
+title: Marble Matrix
 description: A personal knowledge base built with Jekyll
-baseurl: "/flexStart" # change this if your repo name changes
+baseurl: "/marbleMatrix" # change this if your repo name changes
 url: "https://dduyg.github.io"
 
 collections:
