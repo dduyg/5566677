@@ -1,0 +1,24 @@
+title: My Digital Garden
+description: A personal knowledge base built with Jekyll
+baseurl: "/flexStart" # change this if your repo name changes
+url: "https://dduyg.github.io"
+
+collections:
+  notes:
+    output: true
+    permalink: /notes/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: notes
+    values:
+      layout: note
+      published: true
+
+permalink: pretty
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
