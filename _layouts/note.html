@@ -8,10 +8,7 @@ layout: default
   {% if page.last_modified_at %}
     <p class="note-modified">Last modified: {{ page.last_modified_at | date: "%Y-%m-%d" }}</p>
   {% endif %}
-
-  <div class="content">
-    {{ content }}
-  </div>
+  <div>{{ content }}</div>
 
   {% if page.tags %}
     <p class="tags">
