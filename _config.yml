@@ -1,6 +1,6 @@
-title: Marble Matrix
+title: marbleNodes
 description: A personal knowledge base built with Jekyll
-baseurl: "/marbleMatrix" # change this if your repo name changes
+baseurl: "/marbleNodes"
 url: "https://dduyg.github.io"
 
 collections:
