@@ -2,16 +2,18 @@
 layout: default
 ---
 
-<h1>📂 Notes in category: "{{ page.category }}"</h1>
+{% assign published_notes = site.notes | where_exp: "note", "note.published != false" %}
+{% assign categorized_notes = published_notes | where_exp: "note", "note.categories contains page.category" %}
+{% assign sorted_notes = categorized_notes | sort: "last_modified_at" | reverse %}
 
-{% assign filtered_notes = site.notes | where_exp: "note", "note.published != false and note.categories contains page.category" %}
-
-<p>{{ filtered_notes | size }} item{% if filtered_notes.size != 1 %}s{% endif %} under this category.</p>
+<h1>📂 Notes in category "{{ page.category }}"</h1>
+<p>{{ sorted_notes | size }} item{% if sorted_notes | size != 1 %}s{% endif %} under this category.</p>
 
 <ul>
-  {% for note in filtered_notes %}
+  {% for note in sorted_notes %}
     <li>
       <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
+      <small>— Last modified: {{ note.last_modified_at }}</small>
     </li>
   {% endfor %}
 </ul>
