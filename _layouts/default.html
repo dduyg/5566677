@@ -25,12 +25,22 @@
   </main>
 
   <footer>
-    <p>© {{ site.time | date: "%Y" }} ▄</p>
+    <div id="current-time"></div>
     <a href="{{ '/tags/' | relative_url }}">Tags</a>
     <a href="{{ '/categories/' | relative_url }}">Categories</a>
   </footer>
 
- <script src="{{ '/assets/search.js' | relative_url }}"></script>
- <script src="{{ '/assets/theme-toggle.js' | relative_url }}"></script> 
+<script src="{{ '/assets/search.js' | relative_url }}"></script>
+<script src="{{ '/assets/theme-toggle.js' | relative_url }}"></script> 
+<script>
+  function showCurrentTime() {
+    const now = new Date();
+    const time = now.toLocaleTimeString(); // Example: "3:45:12 PM"
+    document.getElementById('current-time').textContent = time;
+  }
+
+  showCurrentTime();
+  setInterval(showCurrentTime, 1000);
+</script>
 </body>
 </html>
