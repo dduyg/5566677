@@ -12,7 +12,7 @@
   <header>
     <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
     <div>
-      <button id="theme-toggle" aria-label="Toggle theme"><svg viewBox="0 0 100 100"><path id="morph-path" d=""></path></svg></button>
+      <button id="theme-toggle" aria-label="Toggle theme"><span id="icon-wrapper"><!-- icon dynamically injected --></span></button>                                                                                                             path></svg></button>
     </div>
   </header>
 
@@ -27,7 +27,6 @@
   </footer>
 
  <script src="{{ '/assets/search.js' | relative_url }}"></script>
- <script src="https://unpkg.com/flubber"></script>
  <script src="{{ '/assets/theme-toggle.js' | relative_url }}"></script> 
 </body>
 </html>
