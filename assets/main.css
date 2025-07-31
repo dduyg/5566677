@@ -114,3 +114,7 @@ ul li {
   padding: 0;
   line-height: normal;
 }
+
+article h1 {
+  margin: 2rem 0 0;
+}
