@@ -4,7 +4,7 @@ title: All Categories
 permalink: /categories/
 ---
 
-# 📂 All Categories
+<h1>📂 All Categories</h1>
 
 <ul>
   {% assign all_categories = "" | split: "" %}
@@ -21,8 +21,10 @@ permalink: /categories/
   {% assign sorted_categories = all_categories | sort %}
 
   {% for category in sorted_categories %}
+    {% assign categorized_notes = site.notes | where_exp: "note", "note.published != false and note.categories contains category" %}
     <li>
       <a href="{{ '/categories/' | append: category | append: '/' | relative_url }}">{{ category }}</a>
+      ({{ categorized_notes | size }} item{% if categorized_notes | size != 1 %}s{% endif %})
     </li>
   {% endfor %}
 </ul>
