@@ -33,7 +33,13 @@
   font-style: normal;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
 body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   font-family: 'Sligoil Micro', monospace;
   background-color: var(--bg);
   color: var(--text);
