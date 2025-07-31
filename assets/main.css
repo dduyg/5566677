@@ -111,11 +111,13 @@ ul li {
   margin: 0.75rem 0 0;
 }
 .breadcrumb-element {
+  color: var(--accent);
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 .breadcrumb-element p {
+  color: var(--link);
   margin: 0 0 0 0.5rem;
   padding: 0;
   line-height: normal;
