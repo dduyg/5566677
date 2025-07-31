@@ -13,7 +13,7 @@ permalink: /
     {% if note.published != false %}
       <li>
         <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
-        <small>— Last modified: {{ note.last_modified_at }}</small>
+        <small>— {{ note.last_modified_at }}</small>
       </li>
     {% endif %}
   {% endfor %}
