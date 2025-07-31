@@ -7,7 +7,6 @@ permalink: /tags/
 <h1>All Tags</h1>
 <div id="network" style="width: 100%; height: 600px; border: 1px solid var(--gray); border-radius: 12px; margin-top: 1rem;"></div>
 
-<!-- Load vis-network -->
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
@@ -20,8 +19,8 @@ permalink: /tags/
     const edgeColor = vars.getPropertyValue('--link').trim();
     const textColor = vars.getPropertyValue('--text').trim();
     const centerColor = vars.getPropertyValue('--secondary').trim();
+    const highlightColor = vars.getPropertyValue('--highlight').trim();
 
-    // Central node (non-clickable pink dot)
     const nodes = new vis.DataSet([
       {
         id: 'center',
@@ -65,7 +64,7 @@ permalink: /tags/
 
     const edges = [];
 
-    // Connect all tags to center
+    // connect each tag to the center
     tagIds.forEach(id => {
       edges.push({
         from: 'center',
@@ -77,7 +76,7 @@ permalink: /tags/
       });
     });
 
-    // Connect all tags to each other (web structure)
+    // connect tags to each other
     for (let i = 0; i < tagIds.length; i++) {
       for (let j = i + 1; j < tagIds.length; j++) {
         edges.push({
@@ -86,7 +85,7 @@ permalink: /tags/
           dashes: true,
           color: { color: edgeColor },
           width: 0.8,
-          smooth: false // 👈 force straight lines
+          smooth: false
         });
       }
     }
@@ -114,7 +113,7 @@ permalink: /tags/
         zoomView: true
       },
       edges: {
-        smooth: false // ✅ straight lines always
+        smooth: false
       },
       nodes: {
         shape: "dot",
@@ -131,13 +130,23 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
-    // Clickable tags
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const id = params.nodes[0];
         const node = nodes.get(id);
         if (node.href) {
-          window.location.href = node.href;
+          // highlight the clicked node
+          nodes.update({
+            id: id,
+            color: {
+              background: highlightColor,
+              border: highlightColor
+            }
+          });
+          // navigate after short delay so it’s visible
+          setTimeout(() => {
+            window.location.href = node.href;
+          }, 150);
         }
       }
     });
