@@ -4,110 +4,109 @@ title: Tags Web
 permalink: /tags/
 ---
 
-<h1>🏷 Tags Network</h1>
+<h1>All Tags</h1>
 <div id="tag-network" style="height: 600px; border: 1px solid var(--gray); border-radius: 8px;"></div>
 
-<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<script>
-  const centerId = 'center-node';
+<!-- vis-network library -->
+<script src="https://unpkg.com/vis-network@9.1.2/standalone/umd/vis-network.min.js"></script>
 
-  // Count notes per tag
-  const tagCounts = {};
-  {% for note in site.notes %}
-    {% if note.published != false %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const centerId = 'center-node';
+    const tagCounts = {};
+    const tagUrls = {};
+
+    {% assign published_notes = site.notes | where_exp: "note", "note.published != false" %}
+    {% for note in published_notes %}
       {% for tag in note.tags %}
         {% assign tag_str = tag | downcase %}
         {% if tagCounts[tag_str] %}
-          tagCounts[tag_str]++;
+          tagCounts[tag_str] += 1;
         {% else %}
           tagCounts[tag_str] = 1;
+          tagUrls[tag_str] = '/tags/' + tag_str + '/';
         {% endif %}
       {% endfor %}
-    {% endif %}
-  {% endfor %}
+    {% endfor %}
 
-  // Prepare nodes
-  const nodes = [
-    {
-      id: centerId,
-      label: '',
-      size: 40,
-      color: {
-        background: 'var(--secondary)',
-        border: 'var(--secondary)'
-      },
-      borderWidth: 3,
-      physics: false
-    }
-  ];
+    const tags = Object.keys(tagCounts);
 
-  Object.keys(tagCounts).forEach(tag => {
-    const count = tagCounts[tag];
-    nodes.push({
-      id: tag,
-      label: tag,
-      size: 20 + count * 3,
-      color: {
-        background: 'var(--gray)',
-        border: 'var(--darkgray)'
-      },
-      font: { color: 'var(--text)' },
-      url: '/tags/' + tag + '/'
-    });
-  });
-
-  // Create edges
-  const edges = [];
-
-  const tagList = Object.keys(tagCounts);
-
-  // 1. Connect center to all tags
-  tagList.forEach(tag => {
-    edges.push({
-      from: centerId,
-      to: tag,
-      dashes: true,
-      color: { color: 'var(--darkgray)' }
-    });
-  });
-
-  // 2. Connect all tags to all other tags (fully connected mesh)
-  for (let i = 0; i < tagList.length; i++) {
-    for (let j = i + 1; j < tagList.length; j++) {
-      edges.push({
-        from: tagList[i],
-        to: tagList[j],
-        dashes: true,
-        color: { color: 'var(--darkgray)' }
-      });
-    }
-  }
-
-  const container = document.getElementById('tag-network');
-  const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
-  const options = {
-    nodes: {
-      shape: 'dot',
-      font: { size: 16 },
-    },
-    layout: { improvedLayout: true },
-    physics: {
-      stabilization: true,
-      barnesHut: {
-        centralGravity: 0.3,
-        springLength: tagList.length > 10 ? 120 : 180
+    const nodes = [
+      {
+        id: centerId,
+        label: '',
+        size: 30,
+        color: {
+          background: getComputedStyle(document.documentElement).getPropertyValue('--secondary').trim(),
+          border: getComputedStyle(document.documentElement).getPropertyValue('--secondary').trim(),
+        },
+        borderWidth: 3,
+        physics: false
       }
-    },
-    interaction: { hover: true },
-  };
+    ];
 
-  const network = new vis.Network(container, data, options);
+    tags.forEach(tag => {
+      nodes.push({
+        id: tag,
+        label: tag,
+        size: 15 + tagCounts[tag] * 2,
+        color: {
+          background: getComputedStyle(document.documentElement).getPropertyValue('--gray').trim(),
+          border: getComputedStyle(document.documentElement).getPropertyValue('--darkgray').trim()
+        },
+        font: { color: getComputedStyle(document.documentElement).getPropertyValue('--text').trim() },
+        url: tagUrls[tag]
+      });
+    });
 
-  network.on("click", function (params) {
-    const id = params.nodes[0];
-    const node = nodes.find(n => n.id === id);
-    if (node && node.url) {
-      window.location.href = node.url;
+    const edges = [];
+
+    // Center to each tag
+    tags.forEach(tag => {
+      edges.push({
+        from: centerId,
+        to: tag,
+        dashes: true,
+        color: { color: getComputedStyle(document.documentElement).getPropertyValue('--darkgray').trim() }
+      });
+    });
+
+    // All tags to each other (fully connected)
+    for (let i = 0; i < tags.length; i++) {
+      for (let j = i + 1; j < tags.length; j++) {
+        edges.push({
+          from: tags[i],
+          to: tags[j],
+          dashes: true,
+          color: { color: getComputedStyle(document.documentElement).getPropertyValue('--darkgray').trim() }
+        });
+      }
     }
+
+    const container = document.getElementById('tag-network');
+    const data = { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) };
+    const options = {
+      nodes: { shape: 'dot' },
+      layout: { improvedLayout: true },
+      physics: {
+        stabilization: true,
+        barnesHut: {
+          centralGravity: 0.3,
+          springLength: tags.length > 10 ? 100 : 180
+        }
+      },
+      interaction: { hover: true }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    // Make tags clickable
+    network.on("click", function (params) {
+      const nodeId = params.nodes[0];
+      const node = nodes.find(n => n.id === nodeId);
+      if (node && node.url) {
+        window.location.href = node.url;
+      }
+    });
   });
 </script>
