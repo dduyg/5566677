@@ -5,15 +5,21 @@ layout: default
 {% assign published_notes = site.notes | where_exp: "note", "note.published != false" %}
 {% assign tagged_notes = published_notes | where_exp: "note", "note.tags contains page.tag" %}
 {% assign sorted_notes = tagged_notes | sort: "last_modified_at" | reverse %}
+{% assign note_count = sorted_notes | size %}
 
 <h1>🏷 Notes tagged "{{ page.tag }}"</h1>
-<p>{{ sorted_notes | size }} item{% if sorted_notes | size != 1 %}s{% endif %} under this tag.</p>
 
-<ul>
-  {% for note in sorted_notes %}
-    <li>
-      <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
-      <small>— Last modified: {{ note.last_modified_at }}</small>
-    </li>
-  {% endfor %}
-</ul>
+{% if note_count == 0 %}
+  <p>There are no notes under this tag yet.</p>
+{% else %}
+  <p>{{ note_count }} item{% if note_count != 1 %}s{% endif %} under this tag.</p>
+
+  <ul>
+    {% for note in sorted_notes %}
+      <li>
+        <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
+        <small>— Last modified: {{ note.last_modified_at }}</small>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
