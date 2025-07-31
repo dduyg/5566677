@@ -16,6 +16,7 @@
 [data-theme="dark"] {
   --bg: #0c2614;
   --text: #ddffea;
+  --secondary: #FF47B6;
   --link: #84ffa8;
   --highlight: rgba(255, 71, 182, 0.15);
 }
