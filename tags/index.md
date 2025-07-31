@@ -5,7 +5,6 @@ permalink: /tags/
 ---
 
 <h1>All Tags</h1>
-
 <div id="network" style="width: 100%; height: 600px; border: 1px solid #ccc;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
@@ -14,9 +13,21 @@ permalink: /tags/
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const tags = [
-      {% assign all_tags = site.tags %}
-      {% for tag in all_tags %}
-        { id: "{{ tag[0] | slugify }}", label: "{{ tag[0] }}", value: {{ tag[1].size }} },
+      {% assign tag_list = "" | split: "" %}
+      {% for note in site.notes %}
+        {% if note.published != false and note.tags %}
+          {% for tag in note.tags %}
+            {% assign slug = tag | slugify %}
+            {% unless tag_list contains slug %}
+              {% assign tag_list = tag_list | push: slug %}
+              {
+                id: "{{ slug }}",
+                label: "{{ tag }}",
+                value: 1
+              },
+            {% endunless %}
+          {% endfor %}
+        {% endif %}
       {% endfor %}
     ];
 
@@ -36,12 +47,15 @@ permalink: /tags/
     const options = {
       nodes: {
         shape: "dot",
-        scaling: { min: 5, max: 20 },
+        scaling: { min: 5, max: 25 },
         font: { size: 14 }
       },
       edges: {
         smooth: true,
-        color: { color: "#ccc" }
+        color: { color: "#aaa" }
+      },
+      layout: {
+        improvedLayout: true
       },
       physics: {
         barnesHut: {
