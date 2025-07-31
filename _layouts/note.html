@@ -12,7 +12,7 @@ layout: default
 
   {% if page.tags %}
     <p class="tags">
-      Tags:
+      ▉ &nbsp; Tags:
       {% for tag in page.tags %}
         <a href="{{ '/tags/' | append: tag | append: '/' | relative_url }}">#{{ tag }}</a>{% unless forloop.last %}, {% endunless %}
       {% endfor %}
@@ -21,7 +21,7 @@ layout: default
 
   {% if page.categories %}
     <p class="categories">
-      Categories:
+      ▉ &nbsp; Categories:
       {% for category in page.categories %}
         <a href="{{ '/categories/' | append: category | append: '/' | relative_url }}">{{ category }}</a>{% unless forloop.last %}, {% endunless %}
       {% endfor %}
