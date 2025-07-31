@@ -1,7 +1,5 @@
 * { 
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -68,12 +66,12 @@ header, footer {
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   fill: var(--accent);
   transition: fill 0.3s ease;
 }
-a:hover .logo-icon {
+.logo-icon:hover {
   fill: var(--highlight);
 }
 
