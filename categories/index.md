@@ -7,7 +7,6 @@ permalink: /categories/
 <h1>📂 All Categories</h1>
 
 {% assign categories = "" | split: "" %}
-
 <ul>
   {% for note in site.notes %}
     {% if note.published != false %}
@@ -17,8 +16,12 @@ permalink: /categories/
 
           {% assign count = 0 %}
           {% for n in site.notes %}
-            {% if n.published != false and n.categories contains cat %}
-              {% assign count = count | plus: 1 %}
+            {% if n.published != false %}
+              {% for c in n.categories %}
+                {% if c == cat %}
+                  {% assign count = count | plus: 1 %}
+                {% endif %}
+              {% endfor %}
             {% endif %}
           {% endfor %}
 
