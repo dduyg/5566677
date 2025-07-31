@@ -21,6 +21,20 @@ permalink: /tags/
     const centerColor = vars.getPropertyValue('--secondary').trim();
     const highlightColor = vars.getPropertyValue('--highlight').trim();
 
+    const tagCounts = {};
+    {% for note in site.notes %}
+      {% if note.published != false and note.tags %}
+        {% for tag in note.tags %}
+          {% assign slug = tag | slugify %}
+          {% if tagCounts[slug] %}
+            {% assign tagCounts[slug] = tagCounts[slug] | plus: 1 %}
+          {% else %}
+            {% assign tagCounts[slug] = 1 %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+
     const nodes = new vis.DataSet([
       {
         id: 'center',
@@ -38,17 +52,30 @@ permalink: /tags/
 
     const tagIds = [];
 
-    {% assign tag_names = "" | split: "" %}
+    {% assign seen_tags = "" | split: "" %}
     {% for note in site.notes %}
       {% if note.published != false and note.tags %}
         {% for tag in note.tags %}
           {% assign slug = tag | slugify %}
-          {% unless tag_names contains slug %}
-            {% assign tag_names = tag_names | push: slug %}
+          {% unless seen_tags contains slug %}
+            {% assign seen_tags = seen_tags | push: slug %}
+            {% assign tag_count = 0 %}
+            {% for other_note in site.notes %}
+              {% if other_note.published != false and other_note.tags contains tag %}
+                {% assign tag_count = tag_count | plus: 1 %}
+              {% endif %}
+            {% endfor %}
+            {% assign node_size = tag_count | times: 3 | plus: 10 %}
+            {% if node_size > 29 %}
+              {% assign node_size = 29 %}
+            {% endif %}
+            {% if node_size < 15 %}
+              {% assign node_size = 15 %}
+            {% endif %}
             nodes.add({
               id: "{{ slug }}",
               label: "{{ tag }}",
-              value: 10,
+              value: {{ node_size }},
               color: {
                 background: nodeColor,
                 border: nodeColor
@@ -64,7 +91,6 @@ permalink: /tags/
 
     const edges = [];
 
-    // connect each tag to the center
     tagIds.forEach(id => {
       edges.push({
         from: 'center',
@@ -76,7 +102,6 @@ permalink: /tags/
       });
     });
 
-    // connect tags to each other
     for (let i = 0; i < tagIds.length; i++) {
       for (let j = i + 1; j < tagIds.length; j++) {
         edges.push({
@@ -118,8 +143,8 @@ permalink: /tags/
       nodes: {
         shape: "dot",
         scaling: {
-          min: 5,
-          max: 20
+          min: 15,
+          max: 30
         },
         font: {
           size: 14,
@@ -135,7 +160,6 @@ permalink: /tags/
         const id = params.nodes[0];
         const node = nodes.get(id);
         if (node.href) {
-          // highlight the clicked node
           nodes.update({
             id: id,
             color: {
@@ -143,7 +167,6 @@ permalink: /tags/
               border: highlightColor
             }
           });
-          // navigate after short delay so it’s visible
           setTimeout(() => {
             window.location.href = node.href;
           }, 150);
