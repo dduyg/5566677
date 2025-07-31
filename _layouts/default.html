@@ -12,26 +12,21 @@
   <header>
     <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
     <div>
-      <input type="text" id="search-box" placeholder="Search notes..." />
+      <input type="text" id="search-box" placeholder="Search..." />
       <button id="theme-toggle"></button>
     </div>
   </header>
 
-  <main>       
-    <nav>
-      <a href="{{ '/tags/' | relative_url }}">Tags</a>
-      <a href="{{ '/categories/' | relative_url }}">Categories</a>
-      <a href="{{ '/graph/' | relative_url }}">Graph</a>   
-    </nav>
-    
+  <main>
     {{ content }}
   </main>
 
   <footer>
-    <p>© {{ site.time | date: "%Y" }} walledGarden</p>
+    <p>© {{ site.time | date: "%Y" }} ▄</p>
+    <a href="{{ '/tags/' | relative_url }}">Tags</a>
+    <a href="{{ '/categories/' | relative_url }}">Categories</a>
   </footer>
 
- <script src="https://unpkg.com/lunr/lunr.js"></script>
  <script src="{{ '/assets/search.js' | relative_url }}"></script>
  <script src="{{ '/assets/theme-toggle.js' | relative_url }}"></script> 
 </body>
