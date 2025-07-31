@@ -7,45 +7,45 @@ permalink: /tags/
 <h1>All Tags</h1>
 <div id="network" style="width: 100%; height: 600px; border: 1px solid var(--gray); border-radius: 12px; margin-top: 1rem;"></div>
 
-<!-- vis-network scripts -->
+<!-- Load vis-network -->
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const root = document.documentElement;
+    const vars = getComputedStyle(root);
 
-    const vars = getComputedStyle(document.documentElement);
-    const textColor = vars.getPropertyValue('--text').trim();
     const nodeColor = vars.getPropertyValue('--gray').trim();
     const edgeColor = vars.getPropertyValue('--link').trim();
-    const bgColor = vars.getPropertyValue('--bg').trim();
+    const textColor = vars.getPropertyValue('--text').trim();
     const centerColor = vars.getPropertyValue('--secondary').trim();
 
-    // Initialize nodes with central node
+    // Central node (non-clickable pink dot)
     const nodes = new vis.DataSet([
       {
         id: 'center',
         label: '',
-        value: 40,
+        value: 30,
         color: {
           background: centerColor,
           border: centerColor
         },
-        physics: false,
         font: { color: textColor },
+        physics: false,
         fixed: true
       }
     ]);
 
-    // Collect all unique tags
-    {% assign all_tags = "" | split: "" %}
+    const tagIds = [];
+
+    {% assign tag_names = "" | split: "" %}
     {% for note in site.notes %}
       {% if note.published != false and note.tags %}
         {% for tag in note.tags %}
           {% assign slug = tag | slugify %}
-          {% unless all_tags contains slug %}
-            {% assign all_tags = all_tags | push: slug %}
+          {% unless tag_names contains slug %}
+            {% assign tag_names = tag_names | push: slug %}
             nodes.add({
               id: "{{ slug }}",
               label: "{{ tag }}",
@@ -57,15 +57,13 @@ permalink: /tags/
               font: { color: textColor },
               href: "{{ '/tags/' | append: slug | append: '/' | relative_url }}"
             });
+            tagIds.push("{{ slug }}");
           {% endunless %}
         {% endfor %}
       {% endif %}
     {% endfor %}
 
-    // Generate edges from center to each tag, and between tags
     const edges = [];
-
-    const tagIds = nodes.getIds().filter(id => id !== "center");
 
     // Connect all tags to center
     tagIds.forEach(id => {
@@ -74,11 +72,12 @@ permalink: /tags/
         to: id,
         dashes: true,
         color: { color: edgeColor },
-        width: 1.5
+        width: 1.2,
+        smooth: false
       });
     });
 
-    // Connect all tags to each other (full mesh)
+    // Connect all tags to each other (web structure)
     for (let i = 0; i < tagIds.length; i++) {
       for (let j = i + 1; j < tagIds.length; j++) {
         edges.push({
@@ -86,16 +85,37 @@ permalink: /tags/
           to: tagIds[j],
           dashes: true,
           color: { color: edgeColor },
-          width: 1
+          width: 0.8,
+          smooth: false // 👈 force straight lines
         });
       }
     }
 
     const container = document.getElementById("network");
 
-    const data = { nodes: nodes, edges: edges };
+    const data = {
+      nodes: nodes,
+      edges: edges
+    };
 
     const options = {
+      layout: { improvedLayout: true },
+      physics: {
+        barnesHut: {
+          gravitationalConstant: -10000,
+          springLength: 180,
+          springConstant: 0.04
+        },
+        stabilization: true
+      },
+      interaction: {
+        hover: true,
+        dragNodes: true,
+        zoomView: true
+      },
+      edges: {
+        smooth: false // ✅ straight lines always
+      },
       nodes: {
         shape: "dot",
         scaling: {
@@ -106,36 +126,16 @@ permalink: /tags/
           size: 14,
           color: textColor
         }
-      },
-      layout: {
-        improvedLayout: true
-      },
-      physics: {
-        barnesHut: {
-          gravitationalConstant: -9000,
-          springLength: 160,
-          springConstant: 0.04
-        },
-        stabilization: true
-      },
-      edges: {
-        smooth: true
-      },
-      interaction: {
-        hover: true,
-        dragNodes: true,
-        zoomView: true,
-        tooltipDelay: 100
       }
     };
 
     const network = new vis.Network(container, data, options);
 
-    // Make nodes clickable to their tag pages
+    // Clickable tags
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
-        const clickedId = params.nodes[0];
-        const node = nodes.get(clickedId);
+        const id = params.nodes[0];
+        const node = nodes.get(id);
         if (node.href) {
           window.location.href = node.href;
         }
