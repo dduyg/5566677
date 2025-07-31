@@ -7,7 +7,7 @@ layout: default
 {% assign sorted_notes = tagged_notes | sort: "last_modified_at" | reverse %}
 {% assign note_count = sorted_notes | size %}
 
-<h1>🏷 Notes tagged "{{ page.tag }}"</h1>
+<h1>Notes tagged "{{ page.tag }}"</h1>
 
 {% if note_count == 0 %}
   <p>There are no notes under this tag yet.</p>
@@ -18,7 +18,7 @@ layout: default
     {% for note in sorted_notes %}
       <li>
         <a href="{{ note.url | relative_url }}">{{ note.title }}</a>
-        <small>— Last modified: {{ note.last_modified_at }}</small>
+        <small>— {{ note.last_modified_at }}</small>
       </li>
     {% endfor %}
   </ul>
