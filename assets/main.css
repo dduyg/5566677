@@ -1,3 +1,4 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --bg: #ebfff0;
   --lightgray: #c5ffdb;
@@ -30,6 +31,7 @@ body {
   font-family: 'Sligoil Micro', monospace;
   background-color: var(--bg);
   color: var(--text);
+  padding: 1rem;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 a {
@@ -50,19 +52,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid;
-  padding-bottom: 1rem;
-  margin-bottom: 2rem;
+  margin: 2rem 0;
 }
-
-.header-right {
-  display: flex;
-  gap: 1rem;
-}
-
-
 header h1 a {
   color: #2d9d5c;
+  font-size: 1.6rem;
   text-decoration: none;
 }
 
