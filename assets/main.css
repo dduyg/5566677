@@ -130,8 +130,10 @@ ul li {
 article h1 {
   margin-bottom: 0;
 }
-.note-modified {
+.content-meta {
   font-size: 0.8rem;
-  color: #74e291;
+  color: var(--gray);
+  margin-top: 0;
 }
-
+.content-meta[show-comma=true]>span:not(:last-child){margin-right:8px}
+.content-meta[show-comma=true]>span:not(:last-child):after{content:","}
