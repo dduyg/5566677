@@ -2,6 +2,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 :root {
   --bg: #ebfff0;
@@ -41,7 +43,8 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-a { color: var(--link); background-color: var(--highlight); }
+a { color: var(--link); } 
+a:hover { background-color: var(--highlight); }
 
 h1, h2, h3 {
   font-family: 'Basteleur Bold', sans-serif;
