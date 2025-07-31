@@ -52,7 +52,7 @@ footer a { background-color: var(--highlight); }
 
 h1, h2 {
   font-family: 'Basteleur Bold', sans-serif;
-  margin: 2rem 0;
+  margin: 0 0 2rem;
 }
 code, pre {
   font-family: 'IBM Plex Mono', monospace;
@@ -62,7 +62,7 @@ header, footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 2rem 0;
+  margin: 2rem 0 6rem;
 }
 
 .logo-icon {
