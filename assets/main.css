@@ -70,8 +70,9 @@ header, footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 2rem 0 6rem;
+  margin: 2rem 0 0;
 }
+header { margin-bottom: 6rem; }
 
 .logo-icon {
   width: 45px;
