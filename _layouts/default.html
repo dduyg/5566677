@@ -11,18 +11,19 @@
 <body>
   <header>
     <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
-    <nav>
-      <a href="{{ '/tags/' | relative_url }}">Tags</a>
-      <a href="{{ '/categories/' | relative_url }}">Categories</a>
-      <a href="{{ '/graph/' | relative_url }}">Graph</a>
-    </nav>
-    <div class="header-right">
+    <div>
       <input type="text" id="search-box" placeholder="Search notes..." />
       <button id="theme-toggle"></button>
     </div>
   </header>
 
-  <main>
+  <main>       
+    <nav>
+      <a href="{{ '/tags/' | relative_url }}">Tags</a>
+      <a href="{{ '/categories/' | relative_url }}">Categories</a>
+      <a href="{{ '/graph/' | relative_url }}">Graph</a>   
+    </nav>
+    
     {{ content }}
   </main>
 
