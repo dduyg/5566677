@@ -83,16 +83,15 @@ ul li {
 
 #theme-toggle {
   background: none;
-  border: none; 
-  cursor: pointer; 
-  padding: 1rem; 
-} 
+  border: none;
+  cursor: pointer;
+  padding: 1rem;
+}
 #theme-toggle svg {
-  width: 48px;
-  height: 48px;
-  fill: var(--link);
-  stroke: var(--link); 
-  transition: fill 0.3s ease, stroke 0.3s ease;
+  width: 40px; 
+  height: 40px;
+  fill: var(--link);  
+  transition: fill 0.3s ease;
 }
 
 .breadcrumb {
