@@ -4,10 +4,9 @@ title: Home
 permalink: /
 ---
 
-# 🌱 Welcome to My Digital Garden
+# marbleNodes
 
-## 🆕 Recent Notes
-
+### Recent Notes
 <ul>
   {% assign recent_notes = site.notes | sort: "last_modified_at" | reverse %}
   {% for note in recent_notes limit: 5 %}
