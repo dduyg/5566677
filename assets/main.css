@@ -57,12 +57,14 @@ header, footer {
   margin: 2rem 0;
 }
 
-ul {
-  list-style: none;
-  padding-left: 0;
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  fill: var(--link);
+  transition: fill 0.3s ease;
 }
-ul li {
-  margin-bottom: 0.5rem;
+a:hover .logo-icon {
+  fill: var(--highlight);
 }
 
 #theme-toggle {
@@ -90,6 +92,14 @@ ul li {
   transition: fill 0.3s ease;
 }
 
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+ul li {
+  margin-bottom: 0.5rem;
+}
+
 .breadcrumb {
   display: flex;
   flex-flow: row wrap;
@@ -114,3 +124,4 @@ article h1 {
   font-size: 0.8rem;
   color: #74e291;
 }
+
