@@ -28,7 +28,7 @@ layout: default
   <h1>{{ page.title }}</h1>
 
   {% if page.last_modified_at %}
-    <p class="note-modified">Last modified: {{ page.last_modified_at | date: "%Y-%m-%d" }}</p>
+    <p show-comma="true" class="content-meta"><span>Last modified: {{ page.last_modified_at | date: "%Y-%m-%d" }}</span></p>
   {% endif %}
   <div>{{ content }}</div>
 
