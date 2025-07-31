@@ -1,0 +1,10 @@
+<nav class="breadcrumb">
+  <a href="{{ '/' | relative_url }}">Home</a> ›
+  {% if page.categories %}
+    <a href="{{ '/categories/' | relative_url }}">Categories</a> ›
+    <a href="{{ '/categories/' | append: page.categories[0] | append: '/' | relative_url }}">
+      {{ page.categories[0] }}
+    </a> ›
+  {% endif %}
+  <span>{{ page.title }}</span>
+</nav>
