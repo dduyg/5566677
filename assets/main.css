@@ -86,8 +86,8 @@ a:hover .logo-icon {
   transform: scale(1);
 }
 #theme-toggle svg {
-  width: 40px; 
-  height: 40px;
+  width: 30px; 
+  height: 30px;
   fill: var(--link);  
   transition: fill 0.3s ease;
 }
