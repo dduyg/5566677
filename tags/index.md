@@ -18,7 +18,7 @@ permalink: /tags/
     const nodeColor = vars.getPropertyValue('--gray').trim();
     const edgeColor = vars.getPropertyValue('--link').trim();
     const textColor = vars.getPropertyValue('--text').trim();
-    const centerColor = vars.getPropertyValue('--secondary').trim();
+    const centerColor = vars.getPropertyValue('--accent').trim();
     const highlightColor = vars.getPropertyValue('--highlight').trim();
 
     const tagCounts = {};
