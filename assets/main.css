@@ -3,7 +3,10 @@
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
-
+::-moz-selection, ::selection {
+  background: color-mix(in srgb, var(--tertiary) 60%, #fff0);
+  color: var(--darkgray);
+}
 :root {
   --light: #ebfff0;
   --lightgray: #c5ffdb;
@@ -53,9 +56,11 @@ main {
   flex: 1;
 }
 
-a { 
-  color: inherit;
+a {
+  color: var(--secondary);
+  font-weight: 600;
   text-decoration: none;
+  transition: color 0.2s;
 }
 a:hover {
   color: var(--tertiary);
