@@ -4,7 +4,7 @@ title: Home
 permalink: /
 ---
 
-<h1 style="color: var(--accent);">marbleNodes</h1>
+<h1 style="color: var(--secondary);">marbleNodes</h1>
 
 ### Recent Notes
 <ul>
