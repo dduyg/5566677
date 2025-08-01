@@ -57,10 +57,21 @@ a {
   color: inherit;
   text-decoration: none;
 }
-a:hover { 
-  color: var(--highlight);
+a:hover {
+  color: var(--tertiary);
 }
-footer a { background-color: var(--highlight); }
+a.internal {
+  background-color: var(--highlight);
+  border-radius: 5px;
+  padding: 0 0.1rem;
+  line-height: 1.4rem;
+}
+footer a {
+  background-color: var(--highlight);
+  border-radius: 8px;
+  margin: 0 0.1rem;
+  padding: 0.2rem 0.4rem;
+}
 
 h1, h2, h3 {
   font-family: 'Basteleur', sans-serif;
@@ -136,5 +147,9 @@ article h1 {
   color: var(--gray);
   margin-top: 0;
 }
-.content-meta[show-comma=true]>span:not(:last-child){margin-right:8px}
-.content-meta[show-comma=true]>span:not(:last-child):after{content:","}
+.content-meta[show-comma=true] > span:not(:last-child) {
+  margin-right: 8px;
+}
+.content-meta[show-comma=true] > span:not(:last-child)::after {
+  content: ",";
+}
