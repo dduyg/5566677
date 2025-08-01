@@ -71,11 +71,31 @@ a.internal {
   padding: 0 0.1rem;
   line-height: 1.4rem;
 }
-footer a {
+a.tag {
   background-color: var(--highlight);
   border-radius: 8px;
   margin: 0 0.1rem;
   padding: 0.2rem 0.4rem;
+}
+a.tag::before {
+  content: "#";
+} 
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-self: end;
+  gap: 0.4rem;
+  margin: 1rem 0;
+  padding-left: 0;
+  list-style: none;
+}
+.tags .tagg {
+  color: var(--tertiary);
+  display: inline-block;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  margin: 0;
 }
 
 h1, h2, h3 {
