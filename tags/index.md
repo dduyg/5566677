@@ -5,6 +5,12 @@ permalink: /tags/
 ---
 
 <h1>All Tags</h1>
+
+
+<pre>
+{{ site.tags | jsonify }}
+</pre>
+
 <div id="network" style="width: 100%; height: 600px; border: 1px solid var(--tertiary); margin-top: 2rem;"></div>
 
 <!-- Load Vis Network -->
