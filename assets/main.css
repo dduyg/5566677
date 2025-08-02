@@ -152,7 +152,7 @@ header, footer {
 #theme-toggle svg {
   width: 25px; 
   height: 25px;
-  fill: var(--gray);
+  fill: var(--darkgray);
   transition: fill 0.3s ease;
 }
 
