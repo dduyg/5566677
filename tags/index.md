@@ -5,7 +5,7 @@ permalink: /tags/
 ---
 
 <h1>All Tags</h1>
-<div id="network" style="width: 100%; height: 600px; border: 1px solid var(--tertiary); margin-top: 2rem;"></div>
+<div id="network" style="width: 100%; height: 600px; border: 1px solid var(--tertiary); border-radius: 12px; margin-top: 1rem;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
