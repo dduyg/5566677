@@ -25,50 +25,53 @@ document.addEventListener("DOMContentLoaded", function () {
   const edges = [];
   const tagIds = [];
 
-  // Build tag nodes
-  {% assign seen_tags = "" | split: "" %}
+  // Get all tag counts first
+  const tagCounts = {};
   {% for note in site.notes %}
     {% if note.published != false and note.tags %}
       {% for tag in note.tags %}
         {% assign slug = tag | slugify %}
-        {% unless seen_tags contains slug %}
-          {% assign seen_tags = seen_tags | push: slug %}
-          {% assign tag_count = 0 %}
-          {% for other_note in site.notes %}
-            {% if other_note.published != false and other_note.tags contains tag %}
-              {% assign tag_count = tag_count | plus: 1 %}
-            {% endif %}
-          {% endfor %}
-          {% assign node_size = tag_count | plus: 6 %}
-          {% if node_size > 16 %}
-            {% assign node_size = 16 %}
-          {% endif %}
-          {% if node_size < 8 %}
-            {% assign node_size = 8 %}
-          {% endif %}
-          nodes.add({
-            id: "{{ slug }}",
-            label: "{{ tag }}",
-            value: {{ node_size }},
-            color: {
-              background: bgColor,
-              border: borderColor
-            },
-            font: {
-              color: labelColor,
-              size: 14,
-              face: "IBM Plex Mono",
-              vadjust: 8
-            },
-            href: "{{ '/tags/' | append: slug | append: '/' | relative_url }}"
-          });
-          tagIds.push("{{ slug }}");
-        {% endunless %}
+        {% if tagCounts[slug] %}
+          {% assign tagCounts[slug] = tagCounts[slug] | plus: 1 %}
+        {% else %}
+          {% assign tagCounts[slug] = 1 %}
+        {% endif %}
       {% endfor %}
     {% endif %}
   {% endfor %}
 
-  // Full web mesh
+  // Compute max/min counts
+  let tagStats = {{ tagCounts | jsonify }};
+  let maxCount = Math.max(...Object.values(tagStats));
+  let minCount = Math.min(...Object.values(tagStats));
+
+  // Size scaling range
+  const minSize = 6;
+  const maxSize = 16;
+
+  // Add tag nodes with scaled size
+  for (const [slug, count] of Object.entries(tagStats)) {
+    let size = minSize + ((count - minCount) / (maxCount - minCount || 1)) * (maxSize - minSize);
+    nodes.add({
+      id: slug,
+      label: slug.replace(/-/g, " "),
+      value: size,
+      color: {
+        background: bgColor,
+        border: borderColor
+      },
+      font: {
+        color: labelColor,
+        size: 14,
+        face: "IBM Plex Mono",
+        vadjust: 8
+      },
+      href: "{{ '/tags/' | relative_url }}" + slug + "/"
+    });
+    tagIds.push(slug);
+  }
+
+  // Fully connect tags
   for (let i = 0; i < tagIds.length; i++) {
     for (let j = i + 1; j < tagIds.length; j++) {
       edges.push({
@@ -76,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         to: tagIds[j],
         color: {
           color: edgeColor,
-          opacity: 0.5
+          opacity: 0.4
         },
         width: 0.6,
         dashes: true
@@ -103,8 +106,8 @@ document.addEventListener("DOMContentLoaded", function () {
     nodes: {
       shape: "dot",
       scaling: {
-        min: 8,
-        max: 16
+        min: minSize,
+        max: maxSize
       }
     },
     edges: {
@@ -114,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const network = new vis.Network(container, data, options);
 
-  // Click to highlight and navigate
+  // Click behavior
   network.on("click", function (params) {
     if (params.nodes.length > 0) {
       const id = params.nodes[0];
