@@ -15,44 +15,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const root = document.documentElement;
   const vars = getComputedStyle(root);
 
-  const nodeColor = vars.getPropertyValue('--lightgray').trim();
-  const edgeColor = vars.getPropertyValue('--darkgray').trim();
+  const nodeColor = vars.getPropertyValue('--darkgray').trim();
+  const edgeColor = vars.getPropertyValue('--tertiary').trim();
   const textColor = nodeColor;
-  const centerColor = vars.getPropertyValue('--secondary').trim();
   const highlightColor = vars.getPropertyValue('--highlight').trim();
 
-  const tagCounts = {};
-  {% for note in site.notes %}
-    {% if note.published != false and note.tags %}
-      {% for tag in note.tags %}
-        {% assign slug = tag | slugify %}
-        {% if tagCounts[slug] %}
-          {% assign tagCounts[slug] = tagCounts[slug] | plus: 1 %}
-        {% else %}
-          {% assign tagCounts[slug] = 1 %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
-
-  const nodes = new vis.DataSet([
-    {
-      id: 'center',
-      label: '',
-      value: 30,
-      color: {
-        background: centerColor,
-        border: centerColor
-      },
-      font: { color: textColor },
-      physics: false,
-      fixed: true,
-      shadow: true
-    }
-  ]);
-
+  const nodes = new vis.DataSet();
+  const edges = [];
   const tagIds = [];
 
+  // Build nodes from unique tags
+  const tagCounts = {};
   {% assign seen_tags = "" | split: "" %}
   {% for note in site.notes %}
     {% if note.published != false and note.tags %}
@@ -81,7 +54,11 @@ document.addEventListener("DOMContentLoaded", function () {
               background: nodeColor,
               border: nodeColor
             },
-            font: { color: textColor },
+            font: {
+              color: textColor,
+              face: "Arial",
+              size: 14
+            },
             href: "{{ '/tags/' | append: slug | append: '/' | relative_url }}",
             shadow: true
           });
@@ -91,69 +68,72 @@ document.addEventListener("DOMContentLoaded", function () {
     {% endif %}
   {% endfor %}
 
-  const edges = [];
-
-  // Connect all tags to center
-  tagIds.forEach(id => {
-    edges.push({
-      from: 'center',
-      to: id,
-      color: { color: edgeColor },
-      width: 1,
-      smooth: false
-    });
-  });
-
-  // Connect all tags to each other
+  // Create full 3D-style mesh (each tag connects to every other)
   for (let i = 0; i < tagIds.length; i++) {
     for (let j = i + 1; j < tagIds.length; j++) {
       edges.push({
         from: tagIds[i],
         to: tagIds[j],
-        color: { color: edgeColor },
-        width: 0.6,
-        smooth: false
+        color: {
+          color: edgeColor,
+          opacity: 0.7
+        },
+        width: 0.8,
+        smooth: false,
+        shadow: false
       });
     }
   }
 
   const container = document.getElementById("network");
 
-  const data = { nodes: nodes, edges: edges };
+  const data = {
+    nodes: nodes,
+    edges: edges
+  };
 
   const options = {
-    layout: { improvedLayout: true },
+    layout: {
+      improvedLayout: true,
+      randomSeed: 12
+    },
     physics: {
       barnesHut: {
-        gravitationalConstant: -9000,
-        springLength: 140,
-        springConstant: 0.03
+        gravitationalConstant: -8000,
+        springLength: 180,
+        springConstant: 0.025,
+        avoidOverlap: 0.3
       },
       stabilization: true
     },
-    interaction: {
-      hover: true,
-      dragNodes: true,
-      zoomView: true
-    },
     nodes: {
       shape: "dot",
-      scaling: { min: 12, max: 24 },
-      font: {
-        size: 13,
-        color: textColor,
-        strokeWidth: 0
+      scaling: {
+        min: 12,
+        max: 24
       },
-      shadow: true
+      shadow: {
+        enabled: true,
+        color: 'rgba(0,0,0,0.4)',
+        size: 10,
+        x: 1,
+        y: 1
+      }
     },
     edges: {
       smooth: false,
       shadow: false
+    },
+    interaction: {
+      hover: true,
+      dragNodes: false,
+      zoomView: true
     }
   };
 
   const network = new vis.Network(container, data, options);
 
+  // Make tag dot and label both clickable
   network.on("click", function (params) {
     if (params.nodes.length > 0) {
       const id = params.nodes[0];
