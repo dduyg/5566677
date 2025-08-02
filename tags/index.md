@@ -15,64 +15,62 @@ document.addEventListener("DOMContentLoaded", function () {
   const root = document.documentElement;
   const vars = getComputedStyle(root);
 
+  const tagData = [
+    {% for tag in site.tags %}
+      {
+        name: {{ tag[0] | jsonify }},
+        count: {{ tag[1].size }},
+        url: {{ '/tags/' | append: tag[0] | slugify | append: '/' | relative_url | jsonify }}
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+
+  if (tagData.length === 0) return;
+
+  const nodes = new vis.DataSet();
+  const edges = [];
+
   const bgColor = vars.getPropertyValue('--secondary').trim();
   const borderColor = vars.getPropertyValue('--tertiary').trim();
   const edgeColor = vars.getPropertyValue('--darkgray').trim();
   const labelColor = edgeColor;
   const highlightColor = vars.getPropertyValue('--highlight').trim();
 
-  const nodes = new vis.DataSet();
-  const edges = [];
-  const tagIds = [];
-
-  // Inject tag counts safely
-  const tagStats = {{ site.tags | jsonify }};
-
+  const counts = tagData.map(t => t.count);
   const minSize = 6;
   const maxSize = 16;
-
-  const tagNames = Object.keys(tagStats);
-  if (tagNames.length === 0) return;
-
-  const counts = tagNames.map(tag => tagStats[tag].length);
-  const maxCount = Math.max(...counts);
   const minCount = Math.min(...counts);
+  const maxCount = Math.max(...counts);
 
-  // Create nodes
-  tagNames.forEach(tag => {
-    const count = tagStats[tag].length;
-    const size = minSize + ((count - minCount) / (maxCount - minCount || 1)) * (maxSize - minSize);
-    const slug = tag.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-
+  tagData.forEach(tag => {
+    const size = minSize + ((tag.count - minCount) / (maxCount - minCount || 1)) * (maxSize - minSize);
     nodes.add({
-      id: slug,
-      label: tag,
+      id: tag.name,
+      label: tag.name,
       value: size,
+      href: tag.url,
       color: {
         background: bgColor,
         border: borderColor
       },
       font: {
-        color: labelColor,
-        size: 14,
         face: "IBM Plex Mono",
-        vadjust: 8
-      },
-      href: "{{ '/tags/' | relative_url }}" + slug + "/"
+        color: labelColor,
+        vadjust: 8,
+        size: 14
+      }
     });
-
-    tagIds.push(slug);
   });
 
-  // Fully connect nodes
-  for (let i = 0; i < tagIds.length; i++) {
-    for (let j = i + 1; j < tagIds.length; j++) {
+  // Connect every tag to every tag (web network)
+  for (let i = 0; i < tagData.length; i++) {
+    for (let j = i + 1; j < tagData.length; j++) {
       edges.push({
-        from: tagIds[i],
-        to: tagIds[j],
+        from: tagData[i].name,
+        to: tagData[j].name,
         color: {
           color: edgeColor,
-          opacity: 0.4
+          opacity: 0.3
         },
         width: 0.6,
         dashes: true
@@ -82,18 +80,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const container = document.getElementById("network");
   const data = { nodes, edges };
-
   const options = {
-    layout: {
-      improvedLayout: true,
-      randomSeed: 13
-    },
+    layout: { improvedLayout: true, randomSeed: 42 },
+    interaction: { hover: true },
     physics: { enabled: false },
-    interaction: {
-      hover: true,
-      dragNodes: false,
-      zoomView: true
-    },
     nodes: {
       shape: "dot",
       scaling: {
@@ -110,14 +100,14 @@ document.addEventListener("DOMContentLoaded", function () {
     if (params.nodes.length > 0) {
       const id = params.nodes[0];
       const node = nodes.get(id);
+      nodes.update({
+        id,
+        color: {
+          background: highlightColor,
+          border: highlightColor
+        }
+      });
       if (node.href) {
-        nodes.update({
-          id: id,
-          color: {
-            background: highlightColor,
-            border: highlightColor
-          }
-        });
         setTimeout(() => {
           window.location.href = node.href;
         }, 150);
