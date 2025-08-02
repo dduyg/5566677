@@ -1,13 +1,11 @@
 ---
 layout: note
-title: "Auto Detect & Fix  DataFrame Issues"
+title: "Automatically Detect & Fix DataFrame Issues with One-Liner Profiling + Fixing"
 published: true
 tags: [python, dataframe]
 categories: [programming]
 last_modified_at: 2025-07-21
 ---
-
-# Automatically Detect & Fix Common DataFrame Issues with One-Liner Profiling + Fixing
 
 Data often comes in messy — mixed dtypes, empty columns, useless identifiers, etc. This hack gives you a **smart one-liner utility** to **profile**, **clean**, and **optimize** your `pandas` DataFrame instantly.
 
