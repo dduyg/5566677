@@ -182,11 +182,13 @@ article h1 {
 .folder::before {
   content: "";
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: 1.2em;
+  height: 1.2em;
   margin-right: 0.4em;
-  vertical-align: middle;
+  vertical-align: -0.15em; /* Adjust value for best centering */
   background-repeat: no-repeat;
   background-size: contain;
+  background-position: center;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cg transform='translate(0,300) scale(0.05,-0.05)' fill='currentColor' stroke='none'%3E%3Cpath d='M210 5297 c-226 -126 -211 43 -205 -2315 l5 -2058 61 -77 c34 -42 101 -97 149 -122 l88 -45 2274 0 c2202 0 2274 1 2320 38 75 59 1079 2088 1092 2205 38 333 -187 516 -655 533 l-279 10 0 392 c-1 808 87 761 -1425 762 l-1135 0 -115 158 c-63 86 -164 225 -225 309 -179 247 -115 233 -1083 232 -566 0 -840 -7 -867 -22z m1804 -602 c327 -461 155 -415 1545 -415 l1141 0 0 -409 0 -409 -1645 -6 -1645 -6 -113 -55 c-147 -73 -187 -128 -369 -518 -84 -180 -199 -426 -256 -547 -57 -121 -148 -317 -203 -435 -54 -118 -106 -214 -114 -215 -19 0 -20 3268 -2 3287 8 7 339 13 736 13 l722 0 203 -285z m3582 -1626 c85 -60 62 -118 -432 -1099 l-474 -940 -2117 -5 c-2011 -5 -2117 -3 -2107 30 34 114 923 1981 957 2010 60 51 4100 55 4173 4z'/%3E%3C/g%3E%3C/svg%3E");
+  fill: var(--dark);
 }
