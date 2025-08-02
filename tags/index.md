@@ -25,36 +25,28 @@ document.addEventListener("DOMContentLoaded", function () {
   const edges = [];
   const tagIds = [];
 
-  // Get all tag counts first
-  const tagCounts = {};
-  {% for note in site.notes %}
-    {% if note.published != false and note.tags %}
-      {% for tag in note.tags %}
-        {% assign slug = tag | slugify %}
-        {% if tagCounts[slug] %}
-          {% assign tagCounts[slug] = tagCounts[slug] | plus: 1 %}
-        {% else %}
-          {% assign tagCounts[slug] = 1 %}
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
+  // Inject tag counts safely
+  const tagStats = {{ site.tags | jsonify }};
 
-  // Compute max/min counts
-  let tagStats = {{ tagCounts | jsonify }};
-  let maxCount = Math.max(...Object.values(tagStats));
-  let minCount = Math.min(...Object.values(tagStats));
-
-  // Size scaling range
   const minSize = 6;
   const maxSize = 16;
 
-  // Add tag nodes with scaled size
-  for (const [slug, count] of Object.entries(tagStats)) {
-    let size = minSize + ((count - minCount) / (maxCount - minCount || 1)) * (maxSize - minSize);
+  const tagNames = Object.keys(tagStats);
+  if (tagNames.length === 0) return;
+
+  const counts = tagNames.map(tag => tagStats[tag].length);
+  const maxCount = Math.max(...counts);
+  const minCount = Math.min(...counts);
+
+  // Create nodes
+  tagNames.forEach(tag => {
+    const count = tagStats[tag].length;
+    const size = minSize + ((count - minCount) / (maxCount - minCount || 1)) * (maxSize - minSize);
+    const slug = tag.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
     nodes.add({
       id: slug,
-      label: slug.replace(/-/g, " "),
+      label: tag,
       value: size,
       color: {
         background: bgColor,
@@ -68,10 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       href: "{{ '/tags/' | relative_url }}" + slug + "/"
     });
-    tagIds.push(slug);
-  }
 
-  // Fully connect tags
+    tagIds.push(slug);
+  });
+
+  // Fully connect nodes
   for (let i = 0; i < tagIds.length; i++) {
     for (let j = i + 1; j < tagIds.length; j++) {
       edges.push({
@@ -95,9 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
       improvedLayout: true,
       randomSeed: 13
     },
-    physics: {
-      enabled: false
-    },
+    physics: { enabled: false },
     interaction: {
       hover: true,
       dragNodes: false,
@@ -110,14 +101,11 @@ document.addEventListener("DOMContentLoaded", function () {
         max: maxSize
       }
     },
-    edges: {
-      smooth: false
-    }
+    edges: { smooth: false }
   };
 
   const network = new vis.Network(container, data, options);
 
-  // Click behavior
   network.on("click", function (params) {
     if (params.nodes.length > 0) {
       const id = params.nodes[0];
