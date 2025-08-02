@@ -2,7 +2,7 @@
 layout: note
 title: "Example Hidden Note"
 published: false
-tags: [python, glitch]
+tags: [python, blocked]
 categories: [productivity]
 last_modified_at: 2025-06-22
 ---
