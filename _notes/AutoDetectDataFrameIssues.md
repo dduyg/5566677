@@ -2,7 +2,7 @@
 layout: note
 title: "Automatically Detect & Fix DataFrame Issues with One-Liner Profiling + Fixing"
 published: true
-tags: [python, dataframe]
+tags: [python, dataframe, snippet]
 categories: [programming]
 last_modified_at: 2025-07-21
 ---
