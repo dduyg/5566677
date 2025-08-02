@@ -3,7 +3,7 @@ layout: note
 title: "Example Note"
 published: true
 tags: [python, gaussian]
-categories: [programming]
+categories: [engineering]
 last_modified_at: 2025-07-30
 ---
 
