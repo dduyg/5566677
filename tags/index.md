@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Tags
+title: Tag Graph
 permalink: /tags/
 ---
 
 <h1>All Tags</h1>
-<div id="network" style="width: 100%; height: 600px; border: 1px solid var(--tertiary); margin-top: 2rem;"></div>
+<div id="network" style="width: 100%; height: 600px; border: 1px solid var(--lightgray); margin-top: 2rem;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const borderColor = vars.getPropertyValue('--tertiary').trim();
   const edgeColor = vars.getPropertyValue('--darkgray').trim();
   const labelColor = edgeColor;
-  const highlightColor = vars.getPropertyValue('--highlight').trim();
+  const highlightColor = vars.getPropertyValue('--tertiary').trim();
 
   const nodes = new vis.DataSet();
   const edges = [];
