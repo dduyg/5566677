@@ -14,13 +14,14 @@ table pre { margin: 0; }
   color: #cd5c5c;
 }
 .kc {
-  color: #C34E00;
+  color: #bdb76b;
+  font-weight: bold;
 }
 .kd {
   color: #f0e68c;
 }
 .kr {
-  color: #007575;
+  color: #87ceeb;
 }
 .k, .kn, .kp, .kt, .kv {
   color: #f0e68c;
@@ -30,6 +31,6 @@ table pre { margin: 0; }
   color: #ffa0a0;
 }
 .nb, .bp {
-  color: #C34E00;
+  color: #bdb76b;
+  font-weight: bold;
 }
-
