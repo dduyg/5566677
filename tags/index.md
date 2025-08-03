@@ -1,11 +1,11 @@
 ---
 layout: default
-title: All Tags
+title: Tag Graph
 permalink: /tags/
 ---
 
 <h1>🏷 All Tags</h1>
-<div id="tag-graph" style="border: 1px solid var(--tertiary); height: 60vh; margin-top: 2rem;"></div>
+<div id="network" style="width: 100%; height: 60vh; border: 1px solid var(--tertiary); margin-top: 2rem;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const bgColor = vars.getPropertyValue('--secondary').trim();
   const borderColor = vars.getPropertyValue('--tertiary').trim();
   const edgeColor = vars.getPropertyValue('--darkgray').trim();
-  const labelColor = edgeColor;
+  const labelColor = vars.getPropertyValue('--darkgray').trim();
   const highlightColor = vars.getPropertyValue('--highlight').trim();
 
   const nodes = new vis.DataSet();
@@ -52,11 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
             value: {{ node_size }},
             color: {
               background: bgColor,
-              border: borderColor,
-              highlight: {
-                background: highlightColor,
-                border: borderColor
-              }
+              border: borderColor
             },
             font: {
               color: labelColor,
@@ -72,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     {% endif %}
   {% endfor %}
 
-  // Dashed edge web
+  // Create dashed connections between all tags
   for (let i = 0; i < tagIds.length; i++) {
     for (let j = i + 1; j < tagIds.length; j++) {
       edges.push({
@@ -88,8 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  const container = document.getElementById("tag-graph");
-  const data = { nodes, edges: new vis.DataSet(edges) };
+  const container = document.getElementById("network");
+  const data = { nodes, edges };
 
   const options = {
     layout: {
@@ -97,10 +93,11 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     physics: {
       enabled: true,
-      solver: "forceAtlas2Based",
       stabilization: {
-        iterations: 200
-      }
+        iterations: 200,
+        updateInterval: 25
+      },
+      solver: "forceAtlas2Based"
     },
     interaction: {
       hover: true,
@@ -122,20 +119,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const network = new vis.Network(container, data, options);
 
-  // Keep line color, just bold when selected
+  // Click to highlight and navigate
   network.on("click", function (params) {
     if (params.nodes.length > 0) {
       const id = params.nodes[0];
       const node = nodes.get(id);
       if (node.href) {
-        // Bold the connected edges temporarily
-        const connectedEdges = network.getConnectedEdges(id);
-        connectedEdges.forEach(eId => {
-          const edge = data.edges.get(eId);
-          data.edges.update({ id: eId, width: 3 });
+        nodes.update({
+          id: id,
+          color: {
+            background: highlightColor,
+            border: highlightColor
+          }
         });
-
-        // Optional small delay before navigation
         setTimeout(() => {
           window.location.href = node.href;
         }, 150);
