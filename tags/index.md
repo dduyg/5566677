@@ -39,12 +39,12 @@ document.addEventListener("DOMContentLoaded", function () {
               {% assign tag_count = tag_count | plus: 1 %}
             {% endif %}
           {% endfor %}
-          {% assign node_size = tag_count | times: 1.5 | plus: 4 %}
-          {% if node_size > 16 %}
-            {% assign node_size = 16 %}
+          {% assign node_size = tag_count | times: 1.5 | plus: 3 %}
+          {% if node_size > 12 %}
+            {% assign node_size = 12 %}
           {% endif %}
-          {% if node_size < 6 %}
-            {% assign node_size = 6 %}
+          {% if node_size < 5 %}
+            {% assign node_size = 5 %}
           {% endif %}
           nodes.add({
             id: "{{ slug }}",
@@ -72,18 +72,19 @@ document.addEventListener("DOMContentLoaded", function () {
     {% endif %}
   {% endfor %}
 
-  // Dashed edge web
+  // Connect all tags with dashed edges
   for (let i = 0; i < tagIds.length; i++) {
     for (let j = i + 1; j < tagIds.length; j++) {
       edges.push({
+        id: `${tagIds[i]}-${tagIds[j]}`,
         from: tagIds[i],
         to: tagIds[j],
         color: {
           color: edgeColor,
-          opacity: 0.4
+          opacity: 0.5
         },
-        width: 1,
-        dashes: [3, 3]
+        width: 0.7,
+        dashes: [2, 4]
       });
     }
   }
@@ -97,9 +98,14 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     physics: {
       enabled: true,
-      solver: "forceAtlas2Based",
+      solver: 'forceAtlas2Based',
+      forceAtlas2Based: {
+        gravitationalConstant: -50,
+        springLength: 100,
+        springConstant: 0.02
+      },
       stabilization: {
-        iterations: 200
+        iterations: 150
       }
     },
     interaction: {
@@ -110,8 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
     nodes: {
       shape: "dot",
       scaling: {
-        min: 6,
-        max: 16
+        min: 5,
+        max: 12
       },
       borderWidth: 2
     },
@@ -122,23 +128,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const network = new vis.Network(container, data, options);
 
-  // Keep line color, just bold when selected
+  // On click: slightly bold connected lines, no color change
   network.on("click", function (params) {
     if (params.nodes.length > 0) {
       const id = params.nodes[0];
       const node = nodes.get(id);
-      if (node.href) {
-        // Bold the connected edges temporarily
-        const connectedEdges = network.getConnectedEdges(id);
-        connectedEdges.forEach(eId => {
-          const edge = data.edges.get(eId);
-          data.edges.update({ id: eId, width: 3 });
-        });
+      const connectedEdges = network.getConnectedEdges(id);
 
-        // Optional small delay before navigation
+      // Bold the lines slightly
+      connectedEdges.forEach(eId => {
+        const original = data.edges.get(eId);
+        data.edges.update({
+          id: eId,
+          width: 1.5 // Slight increase only
+        });
+      });
+
+      if (node.href) {
         setTimeout(() => {
           window.location.href = node.href;
-        }, 150);
+        }, 100);
       }
     }
   });
