@@ -10,7 +10,6 @@ table pre { margin: 0; }
 }
 .cs {
   color: #cc0000;
-  background-color: #fff0f0;
   font-weight: bold;
 }
 .err {
@@ -28,11 +27,9 @@ table pre { margin: 0; }
 }
 .gd {
   color: #000000;
-  background-color: #ffdddd;
 }
 .gi {
   color: #000000;
-  background-color: #ddffdd;
 }
 .ge {
   font-style: italic;
@@ -69,26 +66,21 @@ table pre { margin: 0; }
 }
 .s, .sb, .sc, .sd, .s2, .sh, .s1 {
   color: #dd2200;
-  background-color: #fff0f0;
 }
 .se {
   color: #0044dd;
-  background-color: #fff0f0;
 }
 .si {
   color: #3333bb;
-  background-color: #fff0f0;
 }
 .sx {
   color: #22bb22;
-  background-color: #f0fff0;
 }
 .sr {
   color: #008800;
 }
 .ss {
   color: #aa6600;
-  background-color: #fff0f0;
 }
 .na {
   color: #336699;
