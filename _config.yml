@@ -3,11 +3,13 @@ author: dduyg
 baseurl: "/marbleNodes"
 url: "https://dduyg.github.io"
 
+# Enable collections
 collections:
   notes:
     output: true
     permalink: /notes/:title/
 
+# Default layout for notes
 defaults:
   - scope:
       path: ""
@@ -16,9 +18,20 @@ defaults:
       layout: note
       published: true
 
+# Prettier permalinks
 permalink: pretty
 
+# Enable plugins
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
+
+# Markdown and syntax highlighting settings
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: ""
