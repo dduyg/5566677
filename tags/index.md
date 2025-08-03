@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Tag Graph
+title: All Tags
 permalink: /tags/
 ---
 
-<h1>AllTags</h1>
+<h1>🏷 All Tags</h1>
 <div id="tag-graph" style="border:1px solid var(--tertiary); height: 600px;"></div>
 
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
@@ -23,7 +23,7 @@ permalink: /tags/
   const tags = Object.keys(tagCounts);
   const nodes = tags.map(tag => {
     const count = tagCounts[tag];
-    const size = Math.min(11, Math.max(5, (count * 1.4) + 3));
+    const size = Math.min(30, Math.max(10, count * 5)); // Minimum 10, max 30
     return {
       id: tag,
       label: tag,
@@ -47,18 +47,7 @@ permalink: /tags/
   const edges = [];
   for (let i = 0; i < tags.length; i++) {
     for (let j = i + 1; j < tags.length; j++) {
-      edges.push({
-        from: tags[i],
-        to: tags[j],
-        dashes: true,
-        color: {
-          color: 'var(--darkgray)',
-          highlight: 'var(--darkgray)',
-          hover: 'var(--darkgray)',
-          opacity: 0.6
-        },
-        width: 1
-      });
+      edges.push({ from: tags[i], to: tags[j], dashes: true, color: 'var(--darkgray)' });
     }
   }
 
@@ -68,27 +57,16 @@ permalink: /tags/
   };
 
   const options = {
-    interaction: {
-      hover: true,
-      dragNodes: true,
-      dragView: true
-    },
+    interaction: { hover: true },
     nodes: {
-      borderWidth: 2
+      borderWidth: 2,
     },
     edges: {
+      width: 1,
       smooth: false
     },
     physics: {
-      enabled: true,
-      solver: "barnesHut",
-      barnesHut: {
-        gravitationalConstant: -5000,
-        springLength: 120,
-        springConstant: 0.04,
-        damping: 0.09
-      },
-      stabilization: false
+      stabilization: true
     }
   };
 
