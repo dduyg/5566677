@@ -38,8 +38,8 @@ permalink: /tags/
       const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
       const count = tagCounts[tag];
       let size = Math.round((count * 1.4) + 4);
-      if (size > 14) size = 14;
-      if (size < 6) size = 6;
+      if (size > 13) size = 13;
+      if (size < 7) size = 7;
 
       nodes.add({
         id: tag,
@@ -49,8 +49,8 @@ permalink: /tags/
         font: {
           face: "IBM Plex Mono",
           color: labelColor,
-          size: 14,
-          vadjust: 10
+          size: 11,    // font-size
+          vadjust: -4  // label *closer* to dot
         },
         color: {
           background: bgColor,
@@ -105,8 +105,8 @@ permalink: /tags/
       nodes: {
         borderWidth: 2,
         scaling: {
-          min: 6,
-          max: 14
+          min: 7,
+          max: 13
         }
       },
       edges: {
