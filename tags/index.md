@@ -5,7 +5,7 @@ permalink: /tags/
 ---
 
 <h1>All Tags</h1>
-<div id="tag-graph" style="border:1px solid var(--tertiary); height: 600px;"></div>
+<div id="tag-graph" style="width: 100%; height: 400px; border: 1px solid var(--lightgray); margin-top: 2rem;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
@@ -49,9 +49,8 @@ permalink: /tags/
         font: {
           face: "IBM Plex Mono",
           color: borderColor,
-          size: 11,  // font-size
-          vadjust: -4,    // move *closer* to dot
-          bold: true       
+          size: 11,    // font-size
+          vadjust: -4  // move *closer* to dot      
         },
         color: {
           background: bgColor,
