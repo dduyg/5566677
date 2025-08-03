@@ -2,7 +2,7 @@ table td { padding: 5px; }
 table pre { margin: 0; }
 
 .w {
-  color: #444444;
+  color: #fff;
 }
 .cp {
   color: #CC00A3;
@@ -17,13 +17,14 @@ table pre { margin: 0; }
   color: #C34E00;
 }
 .kd {
-  color: #0000FF;
+  color: #f0e68c;
 }
 .kr {
   color: #007575;
 }
 .k, .kn, .kp, .kt, .kv {
-  color: #0000FF;
+  color: #f0e68c;
+  font-weight: bold;
 }
 .s, .sb, .sc, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss {
   color: #009C00;
@@ -31,3 +32,6 @@ table pre { margin: 0; }
 .nb, .bp {
   color: #C34E00;
 }
+
+
+
