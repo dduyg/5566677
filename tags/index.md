@@ -4,7 +4,7 @@ title: Tag Graph
 permalink: /tags/
 ---
 
-<h1>AllTags</h1>
+<h1>All Tags</h1>
 <div id="tag-graph" style="border:1px solid var(--tertiary); height: 600px;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
@@ -21,25 +21,33 @@ permalink: /tags/
     const labelColor = borderColor;
     const highlightColor = vars.getPropertyValue('--lightgray').trim();
 
-    const tagCounts = {};
-    {% for note in site.notes %}
-      {% if note.published != false and note.tags %}
-        {% for tag in note.tags %}
-          tagCounts["{{ tag }}"] = (tagCounts["{{ tag }}"] || 0) + 1;
-        {% endfor %}
-      {% endif %}
-    {% endfor %}
+    // Get tag counts and slugs from Jekyll
+    const tagData = {
+      {% assign seen = "" %}
+      {% for note in site.notes %}
+        {% if note.published != false and note.tags %}
+          {% for tag in note.tags %}
+            {% unless seen contains tag %}
+              "{{ tag | escape }}": {
+                count: {{ site.notes | where_exp: "item", "item.tags contains '" | append: tag | append: "'" | size }},
+                slug: "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}"
+              },
+              {% assign seen = seen | append: tag | append: "," %}
+            {% endunless %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    };
 
-    const tags = Object.keys(tagCounts);
     const nodes = new vis.DataSet();
     const edges = [];
+    const tags = Object.keys(tagData);
 
     tags.forEach(tag => {
-      const slug = "/tags/" + tag.toLowerCase().replace(/\s+/g, "-") + "/";
-      const count = tagCounts[tag];
-      let size = Math.round((count * 1.4) + 4);
-      if (size > 14) size = 14;
-      if (size < 6) size = 6;
+      const data = tagData[tag];
+      let size = Math.round((data.count * 1.4) + 4);
+      if (size > 13) size = 13; // Slightly smaller max
+      if (size < 7) size = 7;   // Slightly bigger min
 
       nodes.add({
         id: tag,
@@ -65,10 +73,11 @@ permalink: /tags/
             border: borderColor
           }
         },
-        href: slug
+        href: data.slug
       });
     });
 
+    // Basic full-mesh links (can be customized)
     for (let i = 0; i < tags.length; i++) {
       for (let j = i + 1; j < tags.length; j++) {
         edges.push({
@@ -121,7 +130,7 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
-    // Navigate to tag page on click
+    // Navigate on node click
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
