@@ -21,7 +21,7 @@ permalink: /tags/
     const labelColor = borderColor;
     const highlightColor = vars.getPropertyValue('--lightgray').trim();
 
-    // Get tag counts and slugs from Jekyll
+    // Precomputed tag data (slug + count) using Liquid
     const tagData = {
       {% assign seen = "" %}
       {% for note in site.notes %}
@@ -46,8 +46,8 @@ permalink: /tags/
     tags.forEach(tag => {
       const data = tagData[tag];
       let size = Math.round((data.count * 1.4) + 4);
-      if (size > 13) size = 13; // Slightly smaller max
-      if (size < 7) size = 7;   // Slightly bigger min
+      if (size > 13) size = 13; // slightly smaller max
+      if (size < 7) size = 7;   // slightly bigger min
 
       nodes.add({
         id: tag,
@@ -59,11 +59,7 @@ permalink: /tags/
           color: labelColor,
           size: 11,
           vadjust: -4,
-          bold: {
-            color: labelColor,
-            size: 11,
-            vadjust: -4
-          }
+          bold: true
         },
         color: {
           background: bgColor,
@@ -77,7 +73,6 @@ permalink: /tags/
       });
     });
 
-    // Basic full-mesh links (can be customized)
     for (let i = 0; i < tags.length; i++) {
       for (let j = i + 1; j < tags.length; j++) {
         edges.push({
@@ -130,7 +125,6 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
-    // Navigate on node click
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
@@ -138,7 +132,7 @@ permalink: /tags/
         if (node.href) {
           setTimeout(() => {
             window.location.href = node.href;
-          }, 100);
+          }, 150);
         }
       }
     });
