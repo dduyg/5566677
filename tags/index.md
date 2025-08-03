@@ -50,8 +50,7 @@ permalink: /tags/
           face: "IBM Plex Mono",
           color: borderColor,
           size: 11,  // font-size
-          vadjust: -4,    // move *closer* to dot
-          bold: true       
+          vadjust: -4    // move *closer* to dot
         },
         color: {
           background: bgColor,
