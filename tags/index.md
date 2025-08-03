@@ -18,7 +18,7 @@ permalink: /tags/
     const bgColor = vars.getPropertyValue('--secondary').trim();
     const borderColor = vars.getPropertyValue('--tertiary').trim();
     const edgeColor = vars.getPropertyValue('--darkgray').trim();
-    const labelColor = edgeColor;
+    const labelColor = borderColor;
     const highlightColor = vars.getPropertyValue('--lightgray').trim();
 
     const tagCounts = {};
@@ -35,7 +35,7 @@ permalink: /tags/
     const edges = [];
 
     tags.forEach(tag => {
-      const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
+      const slug = "/tags/" + tag.toLowerCase().replace(/\s+/g, "-") + "/";
       const count = tagCounts[tag];
       let size = Math.round((count * 1.4) + 4);
       if (size > 14) size = 14;
@@ -48,9 +48,14 @@ permalink: /tags/
         shape: "dot",
         font: {
           face: "IBM Plex Mono",
-          color: borderColor,
-          size: 11,  // font-size
-          vadjust: -4    // move *closer* to dot
+          color: labelColor,
+          size: 11,
+          vadjust: -4,
+          bold: {
+            color: labelColor,
+            size: 11,
+            vadjust: -4
+          }
         },
         color: {
           background: bgColor,
@@ -116,16 +121,15 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
-    // Node click → go to tag page
+    // Navigate to tag page on click
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
         const node = nodes.get(nodeId);
         if (node.href) {
-          // Optional small delay
           setTimeout(() => {
             window.location.href = node.href;
-          }, 150);
+          }, 100);
         }
       }
     });
