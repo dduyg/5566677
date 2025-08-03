@@ -5,7 +5,7 @@ permalink: /tags/
 ---
 
 <h1>All Tags</h1>
-<div id="tag-graph" style="width: 100%; height: 40vh; border: 1px solid var(--lightgray); margin-top: 2rem;"></div>
+<div id="tag-graph" style="width: 100%; height: 50vh; border: 1px solid var(--lightgray); margin-top: 2rem;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
@@ -131,3 +131,9 @@ permalink: /tags/
     });
   });
 </script>
+
+<style>
+  #tag-graph canvas {
+    font-weight: bold !important;
+  }
+</style>
