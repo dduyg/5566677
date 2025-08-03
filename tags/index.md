@@ -19,7 +19,7 @@ permalink: /tags/
     const borderColor = vars.getPropertyValue('--tertiary').trim();
     const edgeColor = vars.getPropertyValue('--darkgray').trim();
     const labelColor = edgeColor;
-    const highlightColor = vars.getPropertyValue('--highlight').trim();
+    const highlightColor = vars.getPropertyValue('--lightgray').trim();
 
     const tagCounts = {};
     {% for note in site.notes %}
@@ -48,9 +48,9 @@ permalink: /tags/
         shape: "dot",
         font: {
           face: "IBM Plex Mono",
-          color: labelColor,
-          size: 14,
-          vadjust: 10
+          color: borderColor,
+          size: 11,  // font-size
+          vadjust: -4    // move *closer* to dot
         },
         color: {
           background: bgColor,
@@ -74,7 +74,7 @@ permalink: /tags/
             color: edgeColor,
             highlight: edgeColor,
             hover: edgeColor,
-            opacity: 0.6
+            opacity: 0.7
           },
           width: 1
         });
