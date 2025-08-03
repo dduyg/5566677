@@ -5,7 +5,7 @@ permalink: /tags/
 ---
 
 <h1>All Tags</h1>
-<div id="tag-graph" style="border:1px solid var(--tertiary); height: 600px;"></div>
+<div id="tag-graph" style="width: 100%; height: 40vh; border: 1px solid var(--lightgray); margin-top: 2rem;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
@@ -18,34 +18,25 @@ permalink: /tags/
     const bgColor = vars.getPropertyValue('--secondary').trim();
     const borderColor = vars.getPropertyValue('--tertiary').trim();
     const edgeColor = vars.getPropertyValue('--darkgray').trim();
-    const highlightColor = vars.getPropertyValue('--lightgray').trim();
+    const labelColor = edgeColor;
+    const highlightColor = vars.getPropertyValue('--highlight').trim();
 
-    // --- Precomputed tag data injected by Liquid
-    const tagData = {
-      {% assign all_tags = "" | split: "" %}
-      {% for note in site.notes %}
-        {% if note.published != false and note.tags %}
-          {% for tag in note.tags %}
-            {% assign all_tags = all_tags | push: tag %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-      {% assign unique_tags = all_tags | uniq | sort %}
-      {% for tag in unique_tags %}
-        "{{ tag }}": {
-          count: {{ all_tags | where: "tag", tag | size }},
-          slug: "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}"
-        }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    };
+    const tagCounts = {};
+    {% for note in site.notes %}
+      {% if note.published != false and note.tags %}
+        {% for tag in note.tags %}
+          tagCounts["{{ tag }}"] = (tagCounts["{{ tag }}"] || 0) + 1;
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
 
+    const tags = Object.keys(tagCounts);
     const nodes = new vis.DataSet();
     const edges = [];
-    const tags = Object.keys(tagData);
 
     tags.forEach(tag => {
-      const count = tagData[tag].count;
-      const slug = tagData[tag].slug;
+      const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
+      const count = tagCounts[tag];
       let size = Math.round((count * 1.4) + 4);
       if (size > 14) size = 14;
       if (size < 6) size = 6;
@@ -57,9 +48,9 @@ permalink: /tags/
         shape: "dot",
         font: {
           face: "IBM Plex Mono",
-          color: borderColor,
-          size: 11,
-          vadjust: -4
+          color: labelColor,
+          size: 14,
+          vadjust: 10
         },
         color: {
           background: bgColor,
@@ -73,7 +64,6 @@ permalink: /tags/
       });
     });
 
-    // Fully connect all tags for now
     for (let i = 0; i < tags.length; i++) {
       for (let j = i + 1; j < tags.length; j++) {
         edges.push({
@@ -84,7 +74,7 @@ permalink: /tags/
             color: edgeColor,
             highlight: edgeColor,
             hover: edgeColor,
-            opacity: 0.7
+            opacity: 0.6
           },
           width: 1
         });
@@ -126,23 +116,18 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
-    // Enable click to visit tag page
+    // Node click → go to tag page
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
         const node = nodes.get(nodeId);
         if (node.href) {
+          // Optional small delay
           setTimeout(() => {
             window.location.href = node.href;
-          }, 100);
+          }, 150);
         }
       }
     });
   });
 </script>
-
-<style>
-  #tag-graph canvas {
-    font-weight: bold !important;
-  }
-</style>
