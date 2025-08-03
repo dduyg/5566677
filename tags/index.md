@@ -5,7 +5,7 @@ permalink: /tags/
 ---
 
 <h1>All Tags</h1>
-<div id="tag-graph" style="width: 100%; height: 50vh; border: 1px solid var(--lightgray); margin-top: 2rem;"></div>
+<div id="tag-graph" style="border:1px solid var(--tertiary); height: 600px;"></div>
 
 <link href="https://unpkg.com/vis-network/styles/vis-network.css" rel="stylesheet" />
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
@@ -19,7 +19,7 @@ permalink: /tags/
     const borderColor = vars.getPropertyValue('--tertiary').trim();
     const edgeColor = vars.getPropertyValue('--darkgray').trim();
     const labelColor = edgeColor;
-    const highlightColor = vars.getPropertyValue('--highlight').trim();
+    const highlightColor = vars.getPropertyValue('--lightgray').trim();
 
     const tagCounts = {};
     {% for note in site.notes %}
@@ -48,9 +48,10 @@ permalink: /tags/
         shape: "dot",
         font: {
           face: "IBM Plex Mono",
-          color: labelColor,
-          size: 14,
-          vadjust: 10
+          color: borderColor,
+          size: 11,  // font-size
+          vadjust: -4,    // move *closer* to dot
+          bold: true       
         },
         color: {
           background: bgColor,
@@ -74,7 +75,7 @@ permalink: /tags/
             color: edgeColor,
             highlight: edgeColor,
             hover: edgeColor,
-            opacity: 0.6
+            opacity: 0.7
           },
           width: 1
         });
@@ -131,9 +132,3 @@ permalink: /tags/
     });
   });
 </script>
-
-<style>
-  #tag-graph canvas {
-    font-weight: bold !important;
-  }
-</style>
