@@ -4,7 +4,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 ::-moz-selection, ::selection {
-  background: color-mix(in srgb, var(--tertiary) 60%, #fff0);
+  background: var(--selecting);
   color: var(--darkgray);
 }
 :root {
@@ -16,6 +16,7 @@
   --secondary: #ff1493;
   --tertiary: #d373ff;
   --highlight: #ff149326;
+  --selecting: #DEABFA;
 }
 [data-theme="dark"] {
   --light: #0c2614;
@@ -26,6 +27,7 @@
   --secondary: #ff47b6;
   --tertiary: #b73fff;
   --highlight: #ff47b626;
+  --selecting: #6F319C;
 }
 @font-face {
   font-family: 'Sligoil';
@@ -197,7 +199,7 @@ code, tt {
   margin: 0 2px;
   padding: 0 5px;
   white-space: nowrap;
-  border: 1px solid #cecece;
+  border: 1px solid var(--lightgray);
   border-radius: 3px;
 }
 pre code {
@@ -208,8 +210,9 @@ pre code {
   background: transparent;
 }
 pre {
-  border: 1px solid #cccccc;
+  border: 1px solid var(--lightgray);
   font-size: 13px;
+  color: #444444;
   line-height: 19px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
