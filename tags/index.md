@@ -35,7 +35,7 @@ permalink: /tags/
     const edges = [];
 
     tags.forEach(tag => {
-      const slug = "{{ '/tags/' | append: slug | append: '/' | relative_url }}";
+      const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
       const count = tagCounts[tag];
       let size = Math.round((count * 1.4) + 4);
       if (size > 14) size = 14;
