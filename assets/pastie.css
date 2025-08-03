@@ -11,7 +11,7 @@ table pre { margin: 0; }
   color: #CC00A3;
 }
 .c, .cd, .cm, .c1 {
-  color: #FF0000;
+  color: #cd5c5c;
 }
 .kc {
   color: #C34E00;
@@ -32,5 +32,3 @@ table pre { margin: 0; }
 .nb, .bp {
   color: #C34E00;
 }
-
-
