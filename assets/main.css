@@ -3,8 +3,12 @@
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
-::-moz-selection, ::selection {
-  background: var(--selecting);
+::-moz-selection {
+  background: color-mix(in srgb, var(--tertiary) 60%, #fff0);
+  color: var(--darkgray);
+}
+::selection {
+  background: color-mix(in srgb, var(--tertiary) 60%, #fff0);
   color: var(--darkgray);
 }
 :root {
@@ -16,7 +20,6 @@
   --secondary: #ff1493;
   --tertiary: #d373ff;
   --highlight: #ff149326;
-  --selecting: #DEABFA;
 }
 [data-theme="dark"] {
   --light: #0c2614;
@@ -27,7 +30,6 @@
   --secondary: #ff47b6;
   --tertiary: #b73fff;
   --highlight: #ff47b626;
-  --selecting: #6F319C;
 }
 @font-face {
   font-family: 'Sligoil';
