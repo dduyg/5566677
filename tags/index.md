@@ -35,7 +35,7 @@ permalink: /tags/
     const edges = [];
 
     tags.forEach(tag => {
-      const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
+      const slug = `/tags/${tag.replace(/\s+/g, '-').toLowerCase()}/`;
       const count = tagCounts[tag];
       let size = Math.round((count * 1.4) + 4);
       if (size > 13) size = 13;
@@ -48,7 +48,7 @@ permalink: /tags/
         shape: "dot",
         font: {
           face: "IBM Plex Mono",
-          color: labelColor,
+          color: bgColor,
           size: 11,    // font-size
           vadjust: -4  // label *closer* to dot
         },
