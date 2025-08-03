@@ -21,21 +21,22 @@ permalink: /tags/
     const labelColor = borderColor;
     const highlightColor = vars.getPropertyValue('--lightgray').trim();
 
-    // Precomputed tag data (slug + count) using Liquid
+    // Precompute tag counts and slugs safely in Liquid
     const tagData = {
-      {% assign seen = "" %}
+      {% assign tag_map = "" | split: "," %}
       {% for note in site.notes %}
         {% if note.published != false and note.tags %}
           {% for tag in note.tags %}
-            {% unless seen contains tag %}
-              "{{ tag | escape }}": {
-                count: {{ site.notes | where_exp: "item", "item.tags contains '" | append: tag | append: "'" | size }},
-                slug: "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}"
-              },
-              {% assign seen = seen | append: tag | append: "," %}
-            {% endunless %}
+            {% assign tag_map = tag_map | push: tag %}
           {% endfor %}
         {% endif %}
+      {% endfor %}
+      {% assign unique_tags = tag_map | uniq %}
+      {% for tag in unique_tags %}
+        "{{ tag | escape }}": {
+          count: {{ tag_map | where: "tag", tag | size }},
+          slug: "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}"
+        }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     };
 
@@ -58,8 +59,7 @@ permalink: /tags/
           face: "IBM Plex Mono",
           color: labelColor,
           size: 11,
-          vadjust: -4,
-          bold: true
+          vadjust: -4
         },
         color: {
           background: bgColor,
@@ -73,6 +73,7 @@ permalink: /tags/
       });
     });
 
+    // Connect all tags (basic full mesh for now)
     for (let i = 0; i < tags.length; i++) {
       for (let j = i + 1; j < tags.length; j++) {
         edges.push({
