@@ -21,7 +21,6 @@ permalink: /tags/
     const labelColor = edgeColor;
     const highlightColor = vars.getPropertyValue('--highlight').trim();
 
-    // Collect tag counts
     const tagCounts = {};
     {% for note in site.notes %}
       {% if note.published != false and note.tags %}
@@ -35,14 +34,12 @@ permalink: /tags/
     const nodes = new vis.DataSet();
     const edges = [];
 
-    // Add nodes
     tags.forEach(tag => {
-      const slug = `/tags/${tag.replace(/\s+/g, '-').toLowerCase()}/`;
+      const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
       const count = tagCounts[tag];
-
       let size = Math.round((count * 1.4) + 4);
-      if (size > 13) size = 13;
-      if (size < 7) size = 7;
+      if (size > 14) size = 14;
+      if (size < 6) size = 6;
 
       nodes.add({
         id: tag,
@@ -52,8 +49,8 @@ permalink: /tags/
         font: {
           face: "IBM Plex Mono",
           color: labelColor,
-          size: 11,
-          vadjust: -4
+          size: 14,
+          vadjust: 10
         },
         color: {
           background: bgColor,
@@ -67,7 +64,6 @@ permalink: /tags/
       });
     });
 
-    // Connect every tag to every other tag with dashed edges
     for (let i = 0; i < tags.length; i++) {
       for (let j = i + 1; j < tags.length; j++) {
         edges.push({
@@ -92,8 +88,8 @@ permalink: /tags/
       interaction: {
         hover: true,
         dragNodes: true,
-        dragView: true,
-        zoomView: true
+        zoomView: true,
+        dragView: true
       },
       physics: {
         enabled: true,
@@ -109,8 +105,8 @@ permalink: /tags/
       nodes: {
         borderWidth: 2,
         scaling: {
-          min: 7,
-          max: 13
+          min: 6,
+          max: 14
         }
       },
       edges: {
@@ -120,12 +116,13 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
-    // Navigate to tag page when a node is clicked
+    // Node click → go to tag page
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
         const node = nodes.get(nodeId);
         if (node.href) {
+          // Optional small delay
           setTimeout(() => {
             window.location.href = node.href;
           }, 150);
