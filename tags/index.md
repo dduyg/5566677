@@ -18,37 +18,28 @@ permalink: /tags/
     const bgColor = vars.getPropertyValue('--secondary').trim();
     const borderColor = vars.getPropertyValue('--tertiary').trim();
     const edgeColor = vars.getPropertyValue('--darkgray').trim();
-    const labelColor = borderColor;
+    const labelColor = edgeColor;
     const highlightColor = vars.getPropertyValue('--lightgray').trim();
 
-    // Precompute tag counts and slugs safely in Liquid
-    const tagData = {
-      {% assign tag_map = "" | split: "," %}
-      {% for note in site.notes %}
-        {% if note.published != false and note.tags %}
-          {% for tag in note.tags %}
-            {% assign tag_map = tag_map | push: tag %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-      {% assign unique_tags = tag_map | uniq %}
-      {% for tag in unique_tags %}
-        "{{ tag | escape }}": {
-          count: {{ tag_map | where: "tag", tag | size }},
-          slug: "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}"
-        }{% unless forloop.last %},{% endunless %}
-      {% endfor %}
-    };
+    const tagCounts = {};
+    {% for note in site.notes %}
+      {% if note.published != false and note.tags %}
+        {% for tag in note.tags %}
+          tagCounts["{{ tag }}"] = (tagCounts["{{ tag }}"] || 0) + 1;
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
 
+    const tags = Object.keys(tagCounts);
     const nodes = new vis.DataSet();
     const edges = [];
-    const tags = Object.keys(tagData);
 
     tags.forEach(tag => {
-      const data = tagData[tag];
-      let size = Math.round((data.count * 1.4) + 4);
-      if (size > 13) size = 13; // slightly smaller max
-      if (size < 7) size = 7;   // slightly bigger min
+      const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
+      const count = tagCounts[tag];
+      let size = Math.round((count * 1.4) + 4);
+      if (size > 14) size = 14;
+      if (size < 6) size = 6;
 
       nodes.add({
         id: tag,
@@ -57,9 +48,10 @@ permalink: /tags/
         shape: "dot",
         font: {
           face: "IBM Plex Mono",
-          color: labelColor,
-          size: 11,
-          vadjust: -4
+          color: borderColor,
+          size: 11,  // font-size
+          vadjust: -4,    // move *closer* to dot
+          bold: true       
         },
         color: {
           background: bgColor,
@@ -69,11 +61,10 @@ permalink: /tags/
             border: borderColor
           }
         },
-        href: data.slug
+        href: slug
       });
     });
 
-    // Connect all tags (basic full mesh for now)
     for (let i = 0; i < tags.length; i++) {
       for (let j = i + 1; j < tags.length; j++) {
         edges.push({
@@ -126,11 +117,13 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
+    // Node click → go to tag page
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
         const node = nodes.get(nodeId);
         if (node.href) {
+          // Optional small delay
           setTimeout(() => {
             window.location.href = node.href;
           }, 150);
