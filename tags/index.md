@@ -4,7 +4,7 @@ title: Tag Graph
 permalink: /tags/
 ---
 
-<h1>All Tags</h1>
+<h1>AllTags</h1>
 <div id="tag-graph" style="border:1px solid var(--tertiary); height: 600px;"></div>
 
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
