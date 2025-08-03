@@ -37,9 +37,9 @@ permalink: /tags/
     tags.forEach(tag => {
       const slug = "{{ '/tags/' | append: tag | slugify | append: '/' | relative_url }}";
       const count = tagCounts[tag];
-      let size = Math.round((count * 1.3) + 3);
-      if (size > 14) size = 14; // MAX dot size
-      if (size < 6) size = 6;   // MIN dot size
+      let size = Math.round((count * 1.4) + 4);
+      if (size > 14) size = 14;
+      if (size < 6) size = 6;
 
       nodes.add({
         id: tag,
@@ -64,7 +64,6 @@ permalink: /tags/
       });
     });
 
-    // Connect every tag to every other tag (like a mesh)
     for (let i = 0; i < tags.length; i++) {
       for (let j = i + 1; j < tags.length; j++) {
         edges.push({
@@ -77,7 +76,7 @@ permalink: /tags/
             hover: edgeColor,
             opacity: 0.6
           },
-          width: 0.6
+          width: 1
         });
       }
     }
@@ -89,15 +88,19 @@ permalink: /tags/
       interaction: {
         hover: true,
         dragNodes: true,
-        zoomView: true
+        zoomView: true,
+        dragView: true
       },
       physics: {
         enabled: true,
-        stabilization: false,
+        solver: "barnesHut",
         barnesHut: {
           gravitationalConstant: -5000,
-          springLength: 100
-        }
+          springLength: 120,
+          springConstant: 0.04,
+          damping: 0.09
+        },
+        stabilization: false
       },
       nodes: {
         borderWidth: 2,
@@ -113,22 +116,13 @@ permalink: /tags/
 
     const network = new vis.Network(container, data, options);
 
-    // Highlight node on click, do not change line color, just bold the edge
+    // Node click → go to tag page
     network.on("click", function (params) {
       if (params.nodes.length > 0) {
         const nodeId = params.nodes[0];
         const node = nodes.get(nodeId);
         if (node.href) {
-          // Optional visual feedback
-          nodes.update({
-            id: nodeId,
-            color: {
-              background: highlightColor,
-              border: borderColor
-            }
-          });
-
-          // Wait briefly before redirecting
+          // Optional small delay
           setTimeout(() => {
             window.location.href = node.href;
           }, 150);
