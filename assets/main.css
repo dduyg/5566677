@@ -135,19 +135,20 @@ header, footer {
 #theme-toggle {
   background: none;
   border: none;
-  cursor: pointer;
   padding: 1rem;
-  transition: transform 0.6s ease;
+  cursor: pointer;
+  user-select: none;
 }
 #theme-toggle svg {
   width: 30px;
   height: 30px;
   fill: var(--dark);
-  transition: transform 0.6s ease, fill 0.4s;
+  transition: fill 0.4s ease, transform 0.6s ease-in-out;
+  transform-origin: center;
   display: block;
 }
 #theme-toggle.spin svg {
-  transform: rotateX(180deg);
+  transform: rotateY(180deg);    
 }
 
 ul {
