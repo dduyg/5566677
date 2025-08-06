@@ -102,9 +102,12 @@ a.tag::before {
   margin: 0;
 }
 
-h1, h2, h3 {
+h1, h2 {
   font-family: 'Basteleur', sans-serif;
   color: var(--dark);
+}
+h3 {
+  color: var(--darkgray);
 }
 h1 {
   margin: 2.25rem 0 1rem;
@@ -142,7 +145,7 @@ header, footer {
 #theme-toggle svg {
   width: 30px;
   height: 30px;
-  fill: var(--dark);
+  fill: var(--darkgray);
   transition: fill 0.4s ease, transform 0.6s ease-in-out;
   transform-origin: center;
   display: block;
