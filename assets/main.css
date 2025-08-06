@@ -137,24 +137,17 @@ header, footer {
   border: none;
   cursor: pointer;
   padding: 1rem;
-}   
-#icon-wrapper {
-  display: inline-block;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.icon-transition-out { 
-  opacity: 0;
-  transform: scale(0.7);
-}
-.icon-transition-in {
-  opacity: 1; 
-  transform: scale(1);
+  transition: transform 0.6s ease;
 }
 #theme-toggle svg {
-  width: 25px; 
-  height: 25px;
+  width: 30px;
+  height: 30px;
   fill: var(--dark);
-  transition: fill 0.3s ease;
+  transition: transform 0.6s ease, fill 0.4s;
+  display: block;
+}
+#theme-toggle.spin svg {
+  transform: rotateX(180deg);
 }
 
 ul {
